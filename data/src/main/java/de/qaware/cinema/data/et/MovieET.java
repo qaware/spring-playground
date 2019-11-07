@@ -1,4 +1,4 @@
-package movie.et;
+package de.qaware.cinema.data.et;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 public class MovieET {
 
-    private @Id @GeneratedValue String id;
+    private @Id @GeneratedValue Long id;
     private String title;
     private String country;
     private int launch;

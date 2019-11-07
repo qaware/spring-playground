@@ -1,8 +1,9 @@
-package movie;
+package de.qaware.cinema.business;
 
+import de.qaware.cinema.data.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
-import movie.dto.MovieDto;
-import movie.et.MovieET;
+import de.qaware.cinema.business.dto.MovieDto;
+import de.qaware.cinema.data.et.MovieET;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class MovieBAImpl implements MovieBA{
+public class MovieBAImpl implements MovieBA {
 
     private final MovieRepository movieRepository;
 
@@ -24,7 +25,7 @@ public class MovieBAImpl implements MovieBA{
     @Override
     public List<MovieDto> getAllMovies() {
         List<MovieET> movieETS = movieRepository.getAllMovies();
-        List<MovieDto> movieDtos = new ArrayList<MovieDto>();
+        List<MovieDto> movieDtos = new ArrayList<>();
 
         for (MovieET movieET : movieETS) {
             movieDtos.add(

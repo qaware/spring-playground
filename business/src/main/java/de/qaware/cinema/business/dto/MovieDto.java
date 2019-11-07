@@ -1,17 +1,17 @@
-package movie.dto;
+package de.qaware.cinema.business.dto;
 
 import lombok.Data;
 
 @Data
 public class MovieDto {
 
-    private String id;
+    private Long id;
     private String title;
     private String country;
     private int launch;
     private String category;
 
-    public MovieDto(String id, String title, String country, int launch, String category) {
+    public MovieDto(Long id, String title, String country, int launch, String category) {
         this.id = id;
         this.title = title;
         this.country = country;
