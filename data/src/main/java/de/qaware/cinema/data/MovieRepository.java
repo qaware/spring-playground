@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<MovieET, Long> {
 
+    @Query(value = "SELECT * FROM movies ", nativeQuery = true)
     List<MovieET>getAllMovies();
 }
