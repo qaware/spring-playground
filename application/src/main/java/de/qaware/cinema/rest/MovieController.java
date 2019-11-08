@@ -32,8 +32,8 @@ public class MovieController {
 
     @RequestMapping(value = "/movie", method = RequestMethod.GET)
     public ResponseEntity getAllMovies() {
-        List<MovieDto> movieDtos = movieBA.getAllMovies();
         LOGGER.error("List of movieDtos ...");
+        List<MovieDto> movieDtos = movieBA.getAllMovies();
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(movieDtos);

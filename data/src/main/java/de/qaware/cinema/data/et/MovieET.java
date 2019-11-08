@@ -17,6 +17,9 @@ public class MovieET {
     private int launch;
     private String category;
 
+    public MovieET() {
+
+    }
 
     public MovieET(String title, String country, int launch, String category) {
         this.title = title;

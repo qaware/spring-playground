@@ -1,5 +1,12 @@
 server:
   port: 8080
   servlet:
-    context-path: /movie
+    context-path: /cinema
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: docker
+    password: docker
+
 

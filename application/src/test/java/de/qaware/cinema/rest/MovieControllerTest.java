@@ -49,7 +49,7 @@ public class MovieControllerTest {
         when(movieBAMock.getAllMovies()).thenReturn(mockedMovieDtos);
 
         //when
-        //List<MovieDto> movieDtos = sut.getAllMovies();
+
 
         //then
         mvc.perform(get("/movie")
