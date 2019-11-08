@@ -30,7 +30,7 @@ public class MovieController {
     }
 
 
-    @RequestMapping(value = "/movies", method = RequestMethod.GET)
+    @RequestMapping(value = "/movie", method = RequestMethod.GET)
     public ResponseEntity getAllMovies() {
         List<MovieDto> movieDtos = movieBA.getAllMovies();
         LOGGER.error("List of movieDtos ...");
