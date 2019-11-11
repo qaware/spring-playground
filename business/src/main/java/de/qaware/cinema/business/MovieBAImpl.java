@@ -40,7 +40,7 @@ public class MovieBAImpl implements MovieBA {
                             movieET.getCategory())
             );
         }
-        LOGGER.error("Print list of movieDtos: ", movieDtos);
+        LOGGER.info("Print list of movieDtos: ", movieDtos);
         return movieDtos;
 
     }

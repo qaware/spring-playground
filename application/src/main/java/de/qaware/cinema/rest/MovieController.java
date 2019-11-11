@@ -30,16 +30,17 @@ public class MovieController {
     }
 
 
-    @RequestMapping(value = "/movie", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/movie", method = RequestMethod.GET)
     public ResponseEntity getAllMovies() {
-        LOGGER.error("List of movieDtos ...");
+        LOGGER.info("List of movieDtos ...");
         List<MovieDto> movieDtos = movieBA.getAllMovies();
+        LOGGER.info("Hi controller");
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(movieDtos);
     }
 
-    @RequestMapping("/test")
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String getTest() {
         return "Test!";
     }
