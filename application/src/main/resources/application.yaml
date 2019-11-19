@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: docker
-    password: docker
+    username: postgres
+    password: mysecretpassword
 
 

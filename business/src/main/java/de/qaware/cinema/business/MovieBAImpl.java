@@ -4,6 +4,8 @@ import de.qaware.cinema.data.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
 import de.qaware.cinema.business.dto.MovieDto;
 import de.qaware.cinema.data.et.MovieET;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +46,39 @@ public class MovieBAImpl implements MovieBA {
         return movieDtos;
 
     }
+
+//    @Override
+//    public MovieDto addNewMovieToDatabase(String movieTitle, String movieCountry, int movieLaunch, String movieCategory) {
+//        MovieET movieET = movieRepository.addNewMovieToDatabase(movieTitle, movieCountry, movieLaunch, movieCategory);
+//        LOGGER.info(movieTitle);
+//        return new MovieDto(movieET.getId(),movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory());
+//    }
+
+    @Override
+    @Cascade(value = {CascadeType.ALL})
+    public void addNewMovieToDatabase(MovieDto movieDto) {
+        LOGGER.info("Did you get to the BAImpl?");
+        LOGGER.info("What happend to the:");
+        System.out.println(movieDto);
+        MovieET movieET = new MovieET(movieDto.getTitle(), movieDto.getCountry(), movieDto.getLaunch(), movieDto.getCategory());
+        LOGGER.info("Print newly created movieETs:");
+        System.out.println(movieET);
+//        movieRepository.addNewMovieToDatabase(movieET);
+        movieRepository.save(movieET);
+    }
+
+//    @Override
+//    public MovieDto getMovieForEditing(Long movieId) {
+//        MovieET movieET = movieRepository.getMovieForEditing(movieId);
+//        return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory());
+//    }
+//
+//    @Override
+//    public MovieDto deleteMovieById(Long movieId) {
+//        MovieET movieETForDeletion = movieRepository.deleteMovieById(movieId);
+//        MovieDto movieDtoForDeletion = new MovieDto();
+//        return movieDtoForDeletion;
+//    }
+
 }
 
