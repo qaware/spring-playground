@@ -63,21 +63,21 @@ public class MovieBAImpl implements MovieBA {
         MovieET movieET = new MovieET(movieDto.getTitle(), movieDto.getCountry(), movieDto.getLaunch(), movieDto.getCategory());
         LOGGER.info("Print newly created movieETs:");
         System.out.println(movieET);
-//        movieRepository.addNewMovieToDatabase(movieET);
         movieRepository.save(movieET);
+    }
+
+    @Override
+    @Cascade(value = {CascadeType.DELETE})
+    public void deleteMovieById(Long id) {
+        LOGGER.info("Did you get to the BAImpl-Delete?");
+        System.out.println(id);
+        movieRepository.deleteById(id);
     }
 
 //    @Override
 //    public MovieDto getMovieForEditing(Long movieId) {
 //        MovieET movieET = movieRepository.getMovieForEditing(movieId);
 //        return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory());
-//    }
-//
-//    @Override
-//    public MovieDto deleteMovieById(Long movieId) {
-//        MovieET movieETForDeletion = movieRepository.deleteMovieById(movieId);
-//        MovieDto movieDtoForDeletion = new MovieDto();
-//        return movieDtoForDeletion;
 //    }
 
 }

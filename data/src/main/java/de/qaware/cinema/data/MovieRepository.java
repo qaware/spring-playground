@@ -35,6 +35,10 @@ public interface MovieRepository extends JpaRepository<MovieET, Long> {
 //    MovieET getMovieForEditing(@Param(value = "movieId") Long movieId);
 //
 //    @Modifying
-//    @Query("DELETE FROM movies WHERE id = :movieId ")
-//    MovieET deleteMovieById(@Param(value = "movieId") Long movieId);
+//    @Cascade(value = {CascadeType.DELETE})
+//    @Query(value = "DELETE FROM movies WHERE id = :id ", nativeQuery = true)
+//    void deleteMovieById(@Param(value = "id") Long id);
+
+
+    void deleteById(Long id);
 }

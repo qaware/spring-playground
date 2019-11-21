@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Convert;
 import java.util.List;
 
 import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
@@ -57,6 +58,16 @@ public class MovieController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @DeleteMapping("/api/movie/{id}")
+    public ResponseEntity deleteMovieById(@PathVariable String id) {
+        LOGGER.info("Delete Movie?????????????");
+        LOGGER.info(id);
+        long movieId = Long.parseLong(id);
+        LOGGER.info(movieId);
+        movieBA.deleteMovieById(movieId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 
 //    @RequestMapping(value = "/api/movie", method = RequestMethod.GET)
 //    public ResponseEntity getMovieForEditing(
@@ -69,14 +80,8 @@ public class MovieController {
 //
 //    }
 //
-//    @RequestMapping(value = "/api/movie", method = RequestMethod.GET)
-//    public ResponseEntity deleteMovieById(
-//            @RequestParam("movieId") Long movieId) {
-//        MovieDto movieDtoForDeletion = movieBA.deleteMovieById(movieId);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(movieDtoForDeletion);
-//    }
+
+
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String getTest() {
