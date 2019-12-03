@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Convert;
 import java.util.List;
 
 import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
@@ -38,27 +37,29 @@ public class MovieController {
                 .body(movieDtos);
     }
 
-//    @RequestMapping(value = "/api/movie/add", method = RequestMethod.POST)
-//    public ResponseEntity addNewMovieToDatabase(@RequestBody String movieTitle, String movieCountry, Integer movieLaunch, String movieCategory) {
-//        LOGGER.info("Add Movie?????????????");
-//        LOGGER.info(movieTitle);
-//        LOGGER.info(movieCountry);
-//        LOGGER.info(movieLaunch);
-//        LOGGER.info(movieCategory);
-//        LOGGER.info("Hi add controller");
-//        return ResponseEntity.ok(HttpStatus.OK);
-//    }
-
     @RequestMapping(value = "/api/movie/add", method = RequestMethod.POST)
-    public ResponseEntity addNewMovieToDatabase(@RequestBody MovieDto movieDto) {
+    public ResponseEntity addNewMovieToDatabase(@RequestBody MovieDto newMovieDto) {
         LOGGER.info("Add Movie?????????????");
-        LOGGER.info(movieDto);
+        LOGGER.info(newMovieDto);
         LOGGER.info("Hi add controller");
-        movieBA.addNewMovieToDatabase(movieDto);
+        movieBA.addNewMovieToDatabase(newMovieDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/movie/{id}")
+    @RequestMapping(value = "/api/movie/find/{id}", method = RequestMethod.GET)
+    public ResponseEntity getMovie(@PathVariable String id) {
+        LOGGER.info("Find Movie By Id in Controller?????????????");
+        LOGGER.info(id);
+        long movieId = Long.parseLong(id);
+        LOGGER.info(movieId);
+        MovieDto movieDto = movieBA.getMovie(movieId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(movieDto);
+    }
+
+
+    @DeleteMapping("/api/movie/delete/{id}")
     public ResponseEntity deleteMovieById(@PathVariable String id) {
         LOGGER.info("Delete Movie?????????????");
         LOGGER.info(id);
@@ -69,22 +70,13 @@ public class MovieController {
     }
 
 
-//    @RequestMapping(value = "/api/movie", method = RequestMethod.GET)
-//    public ResponseEntity getMovieForEditing(
-//            @RequestParam("movieId") Long movieId) {
-//        MovieDto movieDtoForEdit = movieBA.getMovieForEditing(movieId);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(movieDtoForEdit);
-//
-//
-//    }
-//
+    @RequestMapping(value = "/api/movie/update", method = RequestMethod.POST)
+    public ResponseEntity updateMovie(@RequestBody MovieDto updatedMovieDto) {
+        LOGGER.info("Update Movie?????????????");
+        movieBA.updateMovie(updatedMovieDto);
+        LOGGER.info("Hi update controller");
+        return ResponseEntity.ok(HttpStatus.OK);
 
 
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String getTest() {
-        return "Test!";
     }
 }

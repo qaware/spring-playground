@@ -7,8 +7,9 @@ import java.util.List;
 public interface MovieBA {
 
     List<MovieDto> getAllMovies();
-    void addNewMovieToDatabase(MovieDto movieDto);
+    void addNewMovieToDatabase(MovieDto newMovieDto);
+    MovieDto getMovie(Long id);
     void deleteMovieById(Long id);
-//    MovieDto getMovieForEditing(Long movieId);
+    void updateMovie(MovieDto updatedMovieDto);
 
 }
