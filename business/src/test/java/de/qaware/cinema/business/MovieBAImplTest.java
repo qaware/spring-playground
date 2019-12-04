@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -58,8 +58,8 @@ public class MovieBAImplTest {
         List<MovieDto> movieDtos = sut.getAllMovies();
 
         //then
-        assertThat(movieDtos.get(0).getTitle().equals(movieET1.getTitle()));
-        assertThat(movieDtos.get(1).getCategory().equals(movieET2.getCategory()));
+        assertThat(movieDtos.get(0).getTitle()).isEqualTo(movieET1.getTitle());
+        assertThat(movieDtos.get(1).getCategory()).isEqualTo(movieET2.getCategory());
     }
 
     @Test
@@ -85,8 +85,8 @@ public class MovieBAImplTest {
         MovieDto singleMovieDto = sut.getMovie(id);
 
         //then
-        assertThat(singleMovieDto.getTitle().equals(singleMovieET.getTitle()));
-        assertThat(singleMovieDto.getCategory().equals(singleMovieET.getCategory()));
+        assertThat(singleMovieDto.getTitle()).isEqualTo(singleMovieET.getTitle());
+        assertThat(singleMovieDto.getCategory()).isEqualTo(singleMovieET.getCategory());
     }
 
     @Test

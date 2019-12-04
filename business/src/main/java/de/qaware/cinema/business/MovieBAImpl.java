@@ -43,7 +43,6 @@ public class MovieBAImpl implements MovieBA {
                             movieET.getCategory())
             );
         }
-        LOGGER.info("Print list of movieDtos: ", movieDtos);
         return movieDtos;
 
     }
@@ -53,10 +52,8 @@ public class MovieBAImpl implements MovieBA {
     public void addNewMovieToDatabase(MovieDto newMovieDto) {
         LOGGER.info("Did you get to the BAImpl?");
         LOGGER.info("What happend to the:");
-        System.out.println(newMovieDto);
         MovieET newMovieET = new MovieET(newMovieDto.getTitle(), newMovieDto.getCountry(), newMovieDto.getLaunch(), newMovieDto.getCategory());
         LOGGER.info("Print newly created movieETs:");
-        System.out.println(newMovieET);
         movieRepository.save(newMovieET);
     }
 
@@ -72,7 +69,6 @@ public class MovieBAImpl implements MovieBA {
     @Cascade(value = {CascadeType.DELETE})
     public void deleteMovieById(Long id) {
         LOGGER.info("Did you get to the BAImpl-Delete?");
-        System.out.println(id);
         movieRepository.deleteById(id);
     }
 
@@ -80,7 +76,6 @@ public class MovieBAImpl implements MovieBA {
     @Cascade(value = {CascadeType.SAVE_UPDATE})
     public void updateMovie(MovieDto updatedMovieDto) {
         LOGGER.info("Did you get to the updateMovie in the BAImpl?");
-        System.out.println(updatedMovieDto);
         MovieET updatedMovieET = new MovieET(updatedMovieDto.getId(), updatedMovieDto.getTitle(), updatedMovieDto.getCountry(), updatedMovieDto.getLaunch(), updatedMovieDto.getCategory());
 //        Long updatedId = updatedMovieDto.getId();
 //        String updatedTitle = updatedMovieDto.getTitle();
