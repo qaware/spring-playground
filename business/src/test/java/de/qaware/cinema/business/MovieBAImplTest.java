@@ -1,6 +1,7 @@
 package de.qaware.cinema.business;
 
 import de.qaware.cinema.business.dto.MovieDto;
+import de.qaware.cinema.business.utils.MovieProvider;
 import de.qaware.cinema.data.MovieRepository;
 import de.qaware.cinema.data.et.MovieET;
 import org.junit.Before;
@@ -13,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 
@@ -25,8 +27,8 @@ public class MovieBAImplTest {
     private MovieRepository movieRepositoryMock;
 
     //Test constants
-    private MovieET movieET1 = new MovieET("Some Like It Hot", "USA", 1959, "Comedy");
-    private MovieET movieET2 = new MovieET("La vita è bella", "Italy", 1997, "Drama");
+    private MovieET movieET1 = MovieProvider.preFilledMovieET();
+    private MovieET movieET2 = MovieProvider.preFilledMovieET2();
 
     @Before
     public void setUp() {
@@ -45,7 +47,7 @@ public class MovieBAImplTest {
     }
 
     @Test
-    public void createMovieDtoFromMovieET() {
+    public void getAllMovies() {
         //given
         List<MovieET> mockedMovieEts = new ArrayList<>();
         mockedMovieEts.add(movieET1);
@@ -59,4 +61,57 @@ public class MovieBAImplTest {
         assertThat(movieDtos.get(0).getTitle().equals(movieET1.getTitle()));
         assertThat(movieDtos.get(1).getCategory().equals(movieET2.getCategory()));
     }
+
+    @Test
+    public void addNewMovieToDatabase() {
+        //given
+        MovieDto newMovieDto = MovieProvider.preFilledMovieDto();
+
+        //when
+        sut.addNewMovieToDatabase(newMovieDto);
+
+        //then
+        verify(movieRepositoryMock, times(1)).save(MovieProvider.preFilledMovieET());
+    }
+
+    @Test
+    public void getMovie() {
+        //given
+        Long id = MovieProvider.reusableId();
+        MovieET singleMovieET = MovieProvider.preFilledMovieET();
+        when(movieRepositoryMock.findById(id)).thenReturn(java.util.Optional.of(singleMovieET));
+
+        //when
+        MovieDto singleMovieDto = sut.getMovie(id);
+
+        //then
+        assertThat(singleMovieDto.getTitle().equals(singleMovieET.getTitle()));
+        assertThat(singleMovieDto.getCategory().equals(singleMovieET.getCategory()));
+    }
+
+    @Test
+    public void deleteMovieById() {
+        //given
+        Long id = MovieProvider.reusableId();
+
+        //when
+        sut.deleteMovieById(id);
+
+        //then
+        verify(movieRepositoryMock, times(1)).deleteById(id);
+
+    }
+
+    @Test
+    public void updateMovie() {
+        //given
+        MovieDto updatedMovieDto = MovieProvider.preFilledMovieDto2();
+
+        //when
+        sut.updateMovie(updatedMovieDto);
+
+        //then
+        verify(movieRepositoryMock, times(1 )).save(MovieProvider.preFilledMovieET2());
+    }
+
 }

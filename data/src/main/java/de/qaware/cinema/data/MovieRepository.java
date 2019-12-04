@@ -47,6 +47,4 @@ public interface MovieRepository extends JpaRepository<MovieET, Long> {
                      @Param(value = "updatedLaunch") int updatedLaunch,
                      @Param(value = "updatedCategory") String updatedCategory
                      );
-
-//    void executeUpdate();
 }

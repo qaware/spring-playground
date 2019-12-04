@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -49,13 +48,6 @@ public class MovieBAImpl implements MovieBA {
 
     }
 
-//    @Override
-//    public MovieDto addNewMovieToDatabase(String movieTitle, String movieCountry, int movieLaunch, String movieCategory) {
-//        MovieET movieET = movieRepository.addNewMovieToDatabase(movieTitle, movieCountry, movieLaunch, movieCategory);
-//        LOGGER.info(movieTitle);
-//        return new MovieDto(movieET.getId(),movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory());
-//    }
-
     @Override
     @Cascade(value = {CascadeType.ALL})
     public void addNewMovieToDatabase(MovieDto newMovieDto) {
@@ -71,7 +63,7 @@ public class MovieBAImpl implements MovieBA {
     @Override
     @Cascade(value = {CascadeType.ALL})
     public MovieDto getMovie(Long id) {
-        LOGGER.info("Did you get to the BAImpl-FindMovieById?");
+        LOGGER.info("Did you get to the BAImpl-getMovie()?");
         MovieET movieET = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
         return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory());
     }
@@ -90,18 +82,14 @@ public class MovieBAImpl implements MovieBA {
         LOGGER.info("Did you get to the updateMovie in the BAImpl?");
         System.out.println(updatedMovieDto);
         MovieET updatedMovieET = new MovieET(updatedMovieDto.getId(), updatedMovieDto.getTitle(), updatedMovieDto.getCountry(), updatedMovieDto.getLaunch(), updatedMovieDto.getCategory());
-        Long updatedId = updatedMovieDto.getId();
-        String updatedTitle = updatedMovieDto.getTitle();
-        String updatedCountry = updatedMovieDto.getCountry();
-        int updatedLaunch = updatedMovieDto.getLaunch();
-        String updatedCategory = updatedMovieDto.getCategory();
-
-        LOGGER.info("Print newly created movieETs for EDIT");
-        System.out.println(updatedMovieDto);
-//        movieRepository.updateMovie(updatedMovieET);
-        movieRepository.updateMovie(updatedId, updatedTitle, updatedCountry, updatedLaunch, updatedCategory);
-//        movieRepository.executeUpdate();
+//        Long updatedId = updatedMovieDto.getId();
+//        String updatedTitle = updatedMovieDto.getTitle();
+//        String updatedCountry = updatedMovieDto.getCountry();
+//        int updatedLaunch = updatedMovieDto.getLaunch();
+//        String updatedCategory = updatedMovieDto.getCategory();
+//        LOGGER.info("Print newly created movieETs for EDIT");
+//        movieRepository.updateMovie(updatedId, updatedTitle, updatedCountry, updatedLaunch, updatedCategory);
+        movieRepository.save(updatedMovieET);
     }
-
 }
 

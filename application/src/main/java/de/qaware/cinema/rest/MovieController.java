@@ -17,7 +17,6 @@ import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
 @RestController
 @RequestMapping
 @Slf4j
-@EnableAutoConfiguration
 public class MovieController {
 
     private final MovieBA movieBA;
@@ -25,11 +24,10 @@ public class MovieController {
     @Autowired
     public MovieController(MovieBA movieBA) {
         this.movieBA = movieBA;
-
     }
 
 
-    @RequestMapping(value = "/api/movie", method = RequestMethod.GET)
+    @GetMapping("/api/movie")
     public ResponseEntity getAllMovies() {
         List<MovieDto> movieDtos = movieBA.getAllMovies();
         return ResponseEntity.ok()
@@ -37,18 +35,19 @@ public class MovieController {
                 .body(movieDtos);
     }
 
-    @RequestMapping(value = "/api/movie/add", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/api/movie/add")
     public ResponseEntity addNewMovieToDatabase(@RequestBody MovieDto newMovieDto) {
-        LOGGER.info("Add Movie?????????????");
+        LOGGER.info("addNewMovieToDatabase in Controller reached?");
         LOGGER.info(newMovieDto);
         LOGGER.info("Hi add controller");
         movieBA.addNewMovieToDatabase(newMovieDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/movie/find/{id}", method = RequestMethod.GET)
+    @GetMapping("/api/movie/find/{id}")
     public ResponseEntity getMovie(@PathVariable String id) {
-        LOGGER.info("Find Movie By Id in Controller?????????????");
+        LOGGER.info("getMovie in Controller reached?");
         LOGGER.info(id);
         long movieId = Long.parseLong(id);
         LOGGER.info(movieId);
@@ -61,7 +60,7 @@ public class MovieController {
 
     @DeleteMapping("/api/movie/delete/{id}")
     public ResponseEntity deleteMovieById(@PathVariable String id) {
-        LOGGER.info("Delete Movie?????????????");
+        LOGGER.info("deleteMovieById in Controller reached?");
         LOGGER.info(id);
         long movieId = Long.parseLong(id);
         LOGGER.info(movieId);
@@ -70,13 +69,11 @@ public class MovieController {
     }
 
 
-    @RequestMapping(value = "/api/movie/update", method = RequestMethod.POST)
+    @PostMapping("/api/movie/update")
     public ResponseEntity updateMovie(@RequestBody MovieDto updatedMovieDto) {
-        LOGGER.info("Update Movie?????????????");
+        LOGGER.info("updateMovie in Controller reached?");
         movieBA.updateMovie(updatedMovieDto);
         LOGGER.info("Hi update controller");
         return ResponseEntity.ok(HttpStatus.OK);
-
-
     }
 }
