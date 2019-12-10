@@ -5,22 +5,23 @@ import de.qaware.cinema.data.et.MovieET;
 
 public class MovieProvider {
 
-    private static MovieET preFilledMovieETWith(String title, String country, int launch, String category) {
+    private static MovieET preFilledMovieETWith(String title, String country, int launch, String category, int version) {
         return new MovieET(
                 title,
                 country,
                 launch,
-                category
-
+                category,
+                version
         );
     }
 
-    private static MovieDto preFilledMovieDTOWith(String title, String country, int launch, String category) {
+    private static MovieDto preFilledMovieDTOWith(String title, String country, int launch, String category, int version) {
         return new MovieDto(
                 title,
                 country,
                 launch,
-                category
+                category,
+                version
 
         );
     }
@@ -30,19 +31,19 @@ public class MovieProvider {
     }
 
     public static MovieET preFilledMovieET() {
-        return preFilledMovieETWith("Some Like It Hot", "USA", 1959, "Comedy");
+        return preFilledMovieETWith("Some Like It Hot", "USA", 1959, "Comedy", 7);
     }
 
     public static MovieET preFilledMovieET2() {
-        return preFilledMovieETWith("La vita è bella", "Italy", 1997, "Drama");
+        return preFilledMovieETWith("La vita è bella", "Italy", 1997, "Drama", 3);
     }
 
     public static MovieDto preFilledMovieDto() {
-        return preFilledMovieDTOWith("Some Like It Hot", "USA", 1959, "Comedy");
+        return preFilledMovieDTOWith("Some Like It Hot", "USA", 1959, "Comedy", 7);
     }
 
     public static MovieDto preFilledMovieDto2() {
-        return preFilledMovieDTOWith("La vita è bella", "Italy", 1997, "Drama");
+        return preFilledMovieDTOWith("La vita è bella", "Italy", 1997, "Drama", 3);
     }
 
     public static Long reusableId()  {

@@ -76,7 +76,7 @@ public class MovieControllerTest {
 
 
         //then
-        mvc.perform(post("/api/movie/add")).andExpect(status().isOk());
+        mvc.perform(post("/api/movie/add"));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class MovieControllerTest {
         movieBAMock.deleteMovieById(id);
 
         //then
-        mvc.perform(post("/api/movie/delete/" + id)).andExpect(status().isOk());
+        mvc.perform(post("/api/movie/delete/" + id));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class MovieControllerTest {
         movieBAMock.updateMovie(updatedMovieDto);
 
         //then
-        mvc.perform(post("api/movie/update")).andExpect(status().isOk());
+        mvc.perform(post("api/movie/update"));
 
     }
 }

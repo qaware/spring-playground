@@ -2,6 +2,7 @@ package de.qaware.cinema.rest;
 
 import de.qaware.cinema.business.MovieBA;
 import de.qaware.cinema.business.dto.MovieDto;
+import de.qaware.cinema.business.exceptions.UpdateFailException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class MovieController {
         LOGGER.info(newMovieDto);
         LOGGER.info("Hi add controller");
         movieBA.addNewMovieToDatabase(newMovieDto);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @GetMapping("/api/movie/find/{id}")
@@ -67,12 +68,10 @@ public class MovieController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-
     @PostMapping("/api/movie/update")
-    public ResponseEntity updateMovie(@RequestBody MovieDto updatedMovieDto) {
+    public void updateMovie(@RequestBody MovieDto updatedMovieDto) throws UpdateFailException {
         LOGGER.info("updateMovie in Controller reached?");
         movieBA.updateMovie(updatedMovieDto);
         LOGGER.info("Hi update controller");
-        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

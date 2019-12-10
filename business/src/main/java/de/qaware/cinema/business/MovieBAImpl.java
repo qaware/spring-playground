@@ -1,5 +1,6 @@
 package de.qaware.cinema.business;
 
+import de.qaware.cinema.business.exceptions.UpdateFailException;
 import de.qaware.cinema.data.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
 import de.qaware.cinema.business.dto.MovieDto;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CascadeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 
@@ -40,7 +42,8 @@ public class MovieBAImpl implements MovieBA {
                             movieET.getTitle(),
                             movieET.getCountry(),
                             movieET.getLaunch(),
-                            movieET.getCategory())
+                            movieET.getCategory(),
+                            movieET.getVersion())
             );
         }
         return movieDtos;
@@ -52,7 +55,7 @@ public class MovieBAImpl implements MovieBA {
     public void addNewMovieToDatabase(MovieDto newMovieDto) {
         LOGGER.info("Did you get to the BAImpl?");
         LOGGER.info("What happend to the:");
-        MovieET newMovieET = new MovieET(newMovieDto.getTitle(), newMovieDto.getCountry(), newMovieDto.getLaunch(), newMovieDto.getCategory());
+        MovieET newMovieET = new MovieET(newMovieDto.getTitle(), newMovieDto.getCountry(), newMovieDto.getLaunch(), newMovieDto.getCategory(), newMovieDto.getVersion());
         LOGGER.info("Print newly created movieETs:");
         movieRepository.save(newMovieET);
     }
@@ -62,7 +65,7 @@ public class MovieBAImpl implements MovieBA {
     public MovieDto getMovie(Long id) {
         LOGGER.info("Did you get to the BAImpl-getMovie()?");
         MovieET movieET = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
-        return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory());
+        return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory(), movieET.getVersion());
     }
 
     @Override
@@ -74,17 +77,15 @@ public class MovieBAImpl implements MovieBA {
 
     @Override
     @Cascade(value = {CascadeType.SAVE_UPDATE})
-    public void updateMovie(MovieDto updatedMovieDto) {
+    public void updateMovie(MovieDto updatedMovieDto) throws UpdateFailException {
         LOGGER.info("Did you get to the updateMovie in the BAImpl?");
-        MovieET updatedMovieET = new MovieET(updatedMovieDto.getId(), updatedMovieDto.getTitle(), updatedMovieDto.getCountry(), updatedMovieDto.getLaunch(), updatedMovieDto.getCategory());
-//        Long updatedId = updatedMovieDto.getId();
-//        String updatedTitle = updatedMovieDto.getTitle();
-//        String updatedCountry = updatedMovieDto.getCountry();
-//        int updatedLaunch = updatedMovieDto.getLaunch();
-//        String updatedCategory = updatedMovieDto.getCategory();
-//        LOGGER.info("Print newly created movieETs for EDIT");
-//        movieRepository.updateMovie(updatedId, updatedTitle, updatedCountry, updatedLaunch, updatedCategory);
-        movieRepository.save(updatedMovieET);
+        MovieET updatedMovieET = new MovieET(updatedMovieDto.getId(), updatedMovieDto.getTitle(), updatedMovieDto.getCountry(), updatedMovieDto.getLaunch(), updatedMovieDto.getCategory(), updatedMovieDto.getVersion());
+        try {
+            movieRepository.save(updatedMovieET);
+        } catch (ObjectOptimisticLockingFailureException optimisticLockException) {
+            LOGGER.info("optimisticLockException catch");
+            throw new UpdateFailException("Updating the movie with the id " + updatedMovieDto.getId() + "and the title " + updatedMovieDto.getTitle() + "failed because its values were changed in the meantime");
+        }
     }
 }
 

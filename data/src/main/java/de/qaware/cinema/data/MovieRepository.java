@@ -17,18 +17,10 @@ public interface MovieRepository extends JpaRepository<MovieET, Long> {
     @Query(value = "SELECT * FROM movies ", nativeQuery = true)
     List<MovieET>getAllMovies();
 
+//    @Cascade(value = {CascadeType.ALL})
 //    @Query(value = "INSERT INTO movies " +
-//            "VALUES (:movieTitle, :movieCountry, :movieLaunch, :movieCategory) ", nativeQuery = true)
-//    MovieET addNewMovieToDatabase(
-//                    @Param(value = "movieTitle") String movieTitle,
-//                    @Param(value = "movieCountry") String movieCountry,
-//                    @Param(value = "movieLaunch") int movieLaunch,
-//                    @Param(value = "movieCategory") String movieCategory);
-
-    @Cascade(value = {CascadeType.ALL})
-    @Query(value = "INSERT INTO movies " +
-            "VALUES (:movieET) ", nativeQuery = true)
-    void addNewMovieToDatabase(@Param(value = "movieET") MovieET movieET);
+//            "VALUES (:movieET) ", nativeQuery = true)
+//    void addNewMovieToDatabase(@Param(value = "movieET") MovieET movieET);
 
     Optional<MovieET> findById(Long id);
 

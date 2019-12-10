@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "movies")
-@AllArgsConstructor
 @NoArgsConstructor
 
 public class MovieET {
@@ -38,11 +37,32 @@ public class MovieET {
     @Column(name = "category")
     private String category;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
 
     public MovieET(String title, String country, int launch, String category) {
         this.title = title;
         this.country = country;
         this.launch = launch;
         this.category = category;
+    }
+
+    public MovieET(String title, String country, int launch, String category, int version) {
+        this.title = title;
+        this.country = country;
+        this.launch = launch;
+        this.category = category;
+        this.version = version;
+    }
+
+    public MovieET(Long id, String title, String country, int launch, String category, int version) {
+        this.id = id;
+        this.title = title;
+        this.country = country;
+        this.launch = launch;
+        this.category = category;
+        this.version = version;
     }
 }
