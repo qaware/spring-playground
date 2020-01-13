@@ -1,7 +1,12 @@
 package de.qaware.cinema.business.dto;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class MovieDto {
 
@@ -11,23 +16,6 @@ public class MovieDto {
     private int launch;
     private String category;
     private int version;
-
-    public MovieDto() {}
-
-    public MovieDto(String title, String country, int launch, String category, int version) {
-        this.title = title;
-        this.country = country;
-        this.launch = launch;
-        this.category = category;
-        this.version = version;
-    }
-
-    public MovieDto(Long id, String title, String country, int launch, String category, int version) {
-        this.id = id;
-        this.title = title;
-        this.country = country;
-        this.launch = launch;
-        this.category = category;
-        this.version = version;
-    }
+    private int averageVote;
+    private List<String> comments;
 }

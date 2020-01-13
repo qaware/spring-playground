@@ -2,12 +2,11 @@ package de.qaware.cinema.rest;
 
 import de.qaware.cinema.business.MovieBA;
 import de.qaware.cinema.business.dto.MovieDto;
-import de.qaware.cinema.business.exceptions.UpdateFailException;
+import de.qaware.cinema.data.comment.et.CommentET;
+import de.qaware.cinema.data.vote.et.VoteET;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,51 +26,60 @@ public class MovieController {
     }
 
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/api/movie")
-    public ResponseEntity getAllMovies() {
-        List<MovieDto> movieDtos = movieBA.getAllMovies();
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(movieDtos);
+    public List<MovieDto> getAllMovies() {
+        return movieBA.getAllMovies();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/movie/add")
-    public ResponseEntity addNewMovieToDatabase(@RequestBody MovieDto newMovieDto) {
+    public void addNewMovieToDatabase(@RequestBody MovieDto newMovieDto) {
         LOGGER.info("addNewMovieToDatabase in Controller reached?");
         LOGGER.info(newMovieDto);
         LOGGER.info("Hi add controller");
         movieBA.addNewMovieToDatabase(newMovieDto);
-        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/api/movie/find/{id}")
-    public ResponseEntity getMovie(@PathVariable String id) {
+    public MovieDto getMovie(@PathVariable Long id) {
         LOGGER.info("getMovie in Controller reached?");
         LOGGER.info(id);
-        long movieId = Long.parseLong(id);
-        LOGGER.info(movieId);
-        MovieDto movieDto = movieBA.getMovie(movieId);
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(movieDto);
+        return movieBA.getMovie(id);
     }
 
-
+    @ResponseStatus(value = HttpStatus.OK)
     @DeleteMapping("/api/movie/delete/{id}")
-    public ResponseEntity deleteMovieById(@PathVariable String id) {
+    public void deleteMovieById(@PathVariable Long id) {
         LOGGER.info("deleteMovieById in Controller reached?");
-        LOGGER.info(id);
-        long movieId = Long.parseLong(id);
-        LOGGER.info(movieId);
-        movieBA.deleteMovieById(movieId);
-        return ResponseEntity.ok(HttpStatus.OK);
+        movieBA.deleteMovieById(id);
     }
 
-    @PostMapping("/api/movie/update")
-    public void updateMovie(@RequestBody MovieDto updatedMovieDto) throws UpdateFailException {
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping("/api/movie/update/{id}")
+    public void updateMovie(@PathVariable Long id, @RequestBody MovieDto updatedMovieDto) {
         LOGGER.info("updateMovie in Controller reached?");
-        movieBA.updateMovie(updatedMovieDto);
-        LOGGER.info("Hi update controller");
+        LOGGER.info(id);
+        LOGGER.info(updatedMovieDto);
+        movieBA.updateMovie(id, updatedMovieDto);
+    }
+
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping("/api/movie/vote/{movieId}")
+    public void addVoteToMovie(@PathVariable Long movieId, @RequestBody VoteET newVoteET) {
+        LOGGER.info("addVoteToMovie in Controller reached?");
+        LOGGER.info(movieId);
+        LOGGER.info(newVoteET);
+        movieBA.addVoteToMovie(movieId, newVoteET);
+    }
+
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping("/api/movie/comment/{movieId}")
+    public void addCommentToMovie(@PathVariable Long movieId, @RequestBody CommentET newCommentET) {
+        LOGGER.info("addCommentToMovie in Controller reached?");
+        LOGGER.info(movieId);
+        LOGGER.info(newCommentET);
+        movieBA.addCommentToMovie(movieId, newCommentET);
     }
 }

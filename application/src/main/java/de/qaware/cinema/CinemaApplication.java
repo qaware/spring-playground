@@ -10,12 +10,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @SpringBootApplication
 @EnableTransactionManagement
-public class CinemaofclassicmoviesApplication {
+public class CinemaApplication {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CinemaofclassicmoviesApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CinemaApplication.class);
 
     public static void main(String[] args) {
         LOGGER.info("Starting CinemaApp ...");
-        SpringApplication.run(CinemaofclassicmoviesApplication.class, args);
+        SpringApplication.run(CinemaApplication.class, args);
     }
 }

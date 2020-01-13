@@ -2,6 +2,8 @@ package de.qaware.cinema.rest;
 
 import de.qaware.cinema.business.MovieBA;
 import de.qaware.cinema.business.dto.MovieDto;
+import de.qaware.cinema.data.comment.et.CommentET;
+import de.qaware.cinema.data.vote.et.VoteET;
 import de.qaware.cinema.rest.utils.MovieProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,17 +20,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(MovieController.class)
 @AutoConfigureMockMvc
 public class MovieControllerTest {
-
-    private MovieController sut;
 
     @MockBean
     private MovieBA movieBAMock;
@@ -42,19 +42,18 @@ public class MovieControllerTest {
 
     @Before
     public void setUp() {
-        sut = new MovieController(movieBAMock);
     }
 
     @Test
     public void getAllMovies() throws Exception {
 
         //given
-        List<MovieDto> mockedMovieDtos = new ArrayList<>();
-        mockedMovieDtos.add(movieDto1);
-        mockedMovieDtos.add(movieDto2);
+        List<MovieDto> mockedMovieDTOS = new ArrayList<>();
+        mockedMovieDTOS.add(movieDto1);
+        mockedMovieDTOS.add(movieDto2);
 
         //when
-        when(movieBAMock.getAllMovies()).thenReturn(mockedMovieDtos);
+        when(movieBAMock.getAllMovies()).thenReturn(mockedMovieDTOS);
 
 
         //then
@@ -76,7 +75,7 @@ public class MovieControllerTest {
 
 
         //then
-        mvc.perform(post("/api/movie/add"));
+        mvc.perform(post("/api/movie/add")).andExpect(status().isOk());
     }
 
     @Test
@@ -108,20 +107,49 @@ public class MovieControllerTest {
         movieBAMock.deleteMovieById(id);
 
         //then
-        mvc.perform(post("/api/movie/delete/" + id));
+        mvc.perform(post("/api/movie/delete/" + id)).andExpect(status().isOk());
     }
 
     @Test
     public void updateMovie() throws Exception {
 
         //given
-        MovieDto updatedMovieDto = MovieProvider.preFilledMovieDto2();
+        Long id = MovieProvider.reusableId2();
+        MovieDto updatedMovieDto = MovieProvider.preFilledMovieDto();
 
         //when
-        movieBAMock.updateMovie(updatedMovieDto);
+        movieBAMock.updateMovie(id, updatedMovieDto);
 
         //then
-        mvc.perform(post("api/movie/update"));
+        mvc.perform(post("/api/movie/update")).andExpect(status().isOk());
 
+    }
+
+    @Test
+    public void addVoteToMovie() throws Exception {
+
+        //given
+        Long movieId = MovieProvider.reusableId();
+        VoteET newVoteET = MovieProvider.preFilledVoteET();
+
+        //when
+        movieBAMock.addVoteToMovie(movieId, newVoteET);
+
+        //then
+        mvc.perform(post("/api/movie/vote/" + movieId)).andExpect(status().isOk());
+    }
+
+    @Test
+    public void addCommentToMovie() throws Exception {
+
+        //given
+        Long movieId = MovieProvider.reusableId2();
+        CommentET newCommentET = MovieProvider.preFilledCommentET();
+
+        //when
+        movieBAMock.addCommentToMovie(movieId, newCommentET);
+
+        //then
+        mvc.perform(post("/api/movie/comment/" + movieId)).andExpect(status().isOk());
     }
 }

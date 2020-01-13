@@ -1,23 +1,25 @@
-package de.qaware.cinema.data.et;
+package de.qaware.cinema.data.movie.et;
 
+import de.qaware.cinema.data.comment.et.CommentET;
+import de.qaware.cinema.data.vote.et.VoteET;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-
-
 import javax.persistence.Id;
-
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "movies")
+@Table(name = "movie")
 @NoArgsConstructor
+@AllArgsConstructor
 
 public class MovieET {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -41,28 +43,19 @@ public class MovieET {
     @Column(name = "version")
     private int version;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "movieET")
+    private List<VoteET> votes;
 
-    public MovieET(String title, String country, int launch, String category) {
-        this.title = title;
-        this.country = country;
-        this.launch = launch;
-        this.category = category;
-    }
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "movieET")
+    private List<CommentET> comments;
 
-    public MovieET(String title, String country, int launch, String category, int version) {
-        this.title = title;
-        this.country = country;
-        this.launch = launch;
-        this.category = category;
-        this.version = version;
-    }
-
-    public MovieET(Long id, String title, String country, int launch, String category, int version) {
-        this.id = id;
+    public MovieET(String title, String country, int launch, String category, int version, List<VoteET> votes, List<CommentET> comments) {
         this.title = title;
         this.country = country;
         this.launch = launch;
         this.category = category;
         this.version = version;
+        this.votes = votes;
+        this.comments = comments;
     }
 }
