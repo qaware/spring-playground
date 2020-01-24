@@ -23,3 +23,14 @@ Now execute the application using maven:
 cd application
 mvn spring-boot:run
 ```
+
+Too see the results in your browser, change to ...
+```bash
+cd frontend
+cd cinema
+```
+
+... and run:
+```bash
+npm start
+```

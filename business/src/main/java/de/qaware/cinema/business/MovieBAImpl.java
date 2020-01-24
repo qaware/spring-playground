@@ -1,8 +1,12 @@
 package de.qaware.cinema.business;
 
+import de.qaware.cinema.business.dto.ActorDto;
 import de.qaware.cinema.business.exceptions.UpdateFailException;
+import de.qaware.cinema.data.actor.ActorRepository;
+import de.qaware.cinema.data.actor.et.ActorET;
 import de.qaware.cinema.data.comment.CommentRepository;
 import de.qaware.cinema.data.movie.MovieRepository;
+import de.qaware.cinema.data.movie_actor.MovieActorRepository;
 import de.qaware.cinema.data.vote.VoteRepository;
 import de.qaware.cinema.data.comment.et.CommentET;
 import de.qaware.cinema.data.vote.et.VoteET;
@@ -31,13 +35,17 @@ public class MovieBAImpl implements MovieBA {
     private final MovieRepository movieRepository;
     private final VoteRepository voteRepository;
     private final CommentRepository commentRepository;
+    private final ActorRepository actorRepository;
+    private final MovieActorRepository movieActorRepository;
 
     @Autowired
-    public MovieBAImpl(MovieRepository movieRepository, VoteRepository voteRepository, CommentRepository commentRepository) {
+    public MovieBAImpl(MovieRepository movieRepository, VoteRepository voteRepository, CommentRepository commentRepository, ActorRepository actorRepository, MovieActorRepository movieActorRepository) {
 
         this.movieRepository = movieRepository;
         this.voteRepository = voteRepository;
         this.commentRepository = commentRepository;
+        this.actorRepository = actorRepository;
+        this.movieActorRepository = movieActorRepository;
     }
 
     @Override
@@ -61,15 +69,7 @@ public class MovieBAImpl implements MovieBA {
     public List<MovieDto> getAllMovies() {
         List<MovieET> movieETS = movieRepository.getAllMovies();
         List<MovieDto> movieDTOS = new ArrayList<>();
-
         for (MovieET movieET : movieETS) {
-            List<Integer> votes = voteRepository.findAllVotesForMovie(movieET.getId());
-            int averageVote = 0;
-            int totalValue = 0;
-            for (Integer vote : votes) {
-                totalValue += vote;
-                averageVote = totalValue / votes.size();
-            }
             movieDTOS.add(
                     new MovieDto(movieET.getId(),
                             movieET.getTitle(),
@@ -77,13 +77,81 @@ public class MovieBAImpl implements MovieBA {
                             movieET.getLaunch(),
                             movieET.getCategory(),
                             movieET.getVersion(),
-                            averageVote,
-                            this.getComments(movieET.getId())
+                            this.getAverageVote(movieET.getId()),
+                            this.getComments(movieET.getId()),
+                            this.getActorDTOSForMovie(movieET.getId())
                     ));
         }
         return movieDTOS;
-
     }
+
+    @Override
+    @Cascade(value = {CascadeType.ALL})
+    public MovieDto getMovie(Long id) {
+        MovieET movieET = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory(), movieET.getVersion(), this.getAverageVote(movieET.getId()), this.getComments(movieET.getId()), this.getActorDTOSForMovie(movieET.getId()));
+    }
+
+    @Override
+    public List<ActorDto> getAllActors() {
+        List<ActorET> actorETS = actorRepository.getAllActors();
+        List<ActorDto> actorDTOS = new ArrayList<>();
+
+        for (ActorET actorET : actorETS) {
+            actorDTOS.add(
+                    new ActorDto(actorET.getId(),
+                            actorET.getName(),
+                            actorET.getAge(),
+                            this.getMovieTitlesForActor(actorET.getId())
+                    ));
+        }
+        return actorDTOS;
+    }
+
+    @Override
+    @Cascade(value = {CascadeType.ALL})
+    public ActorDto getActor(Long id) {
+        ActorET actorET = actorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return new ActorDto(actorET.getId(), actorET.getName(), actorET.getAge(), this.getMovieTitlesForActor(actorET.getId()));
+    }
+
+    @Override
+    public List<String> getMovieTitlesForActor(Long actorId) {
+        List<Long> movieIds = movieActorRepository.getAllMovieIdsFromActorId(actorId);
+        List<String> movieTitles = new ArrayList<>();
+        for (Long movieId : movieIds) {
+            movieTitles.add(movieRepository.findTitle(movieId));
+        }
+        return movieTitles;
+    }
+
+
+    @Override
+    public List<ActorET> getActorETSForMovie(Long movieId) {
+        List<Long> actorIds = movieActorRepository.getActorIdsFromMovieId(movieId);
+        List<ActorET> actorETS = new ArrayList<>();
+        for (Long actorId : actorIds) {
+            actorETS.add(actorRepository.findById(actorId).orElseThrow(() -> new EntityNotFoundException(Long.toString(actorId))));
+        }
+        return actorETS;
+    }
+
+    @Override
+    public List<ActorDto> getActorDTOSForMovie(Long movieId) {
+        List<ActorDto> actorDTOS = new ArrayList<>();
+        for (ActorET actorET : this.getActorETSForMovie(movieId)) {
+            actorDTOS.add(
+                    new ActorDto(
+                            actorET.getId(),
+                            actorET.getName(),
+                            actorET.getAge(),
+                            this.getMovieTitlesForActor(actorET.getId())
+                    )
+            );
+        }
+        return actorDTOS;
+    }
+
 
     @Override
     @Cascade(value = {CascadeType.ALL})
@@ -93,24 +161,15 @@ public class MovieBAImpl implements MovieBA {
     }
 
     @Override
-    @Cascade(value = {CascadeType.ALL})
-    public MovieDto getMovie(Long id) {
-        LOGGER.info("Did you get to the BAImpl-getMovie()?");
-        MovieET movieET = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
-        return new MovieDto(movieET.getId(), movieET.getTitle(), movieET.getCountry(), movieET.getLaunch(), movieET.getCategory(), movieET.getVersion(), this.getAverageVote(movieET.getId()), this.getComments(movieET.getId()));
-    }
-
-    @Override
     @Cascade(value = {CascadeType.DELETE})
     public void deleteMovieById(Long id) {
-        LOGGER.info("Did you get to the BAImpl-Delete?");
         movieRepository.deleteById(id);
     }
 
     @Override
     @Cascade(value = {CascadeType.ALL})
     public void updateMovie(Long id, MovieDto updatedMovieDto) {
-    MovieET movieET = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        MovieET movieET = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
         MovieET newMovieET = new MovieET(
                 movieET.getId(),
                 updatedMovieDto.getTitle(),
@@ -118,6 +177,7 @@ public class MovieBAImpl implements MovieBA {
                 updatedMovieDto.getLaunch(),
                 updatedMovieDto.getCategory(),
                 updatedMovieDto.getVersion(),
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>());
         try {
