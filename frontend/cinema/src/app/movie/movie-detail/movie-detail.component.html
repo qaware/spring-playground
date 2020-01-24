@@ -1,0 +1,41 @@
+<section class="movie-detail" fxLayout fxLayoutAlign="center center">
+    <form [formGroup]="movieDetailForm" (ngSubmit)="onSubmit()" novalidate>
+        <mat-card fxFlex.xs="100%" fxFlex="400px">
+            <mat-card-header>
+                <img mat-card-avatar [src]="defaultImage" alt="defaultImage"/>
+                <mat-card-title>{{ id }}</mat-card-title>
+                <mat-card-subtitle>{{ title }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content fxLayout="column" fxLayoutAlign="center center">
+                <div class="card" fxflex.xs="100%" fxlayoutalign=" center center">
+                    <mat-card class="comment-card">
+                        <mat-card-content>
+                            <mat-card-subtitle>all comments on this movie:</mat-card-subtitle>
+                            <mat-action-list>
+                                <button mat-list-item *ngFor="let comment of comments"> {{ comment }}
+                                </button>
+                            </mat-action-list>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="actors-card">
+                        <mat-card-content>
+                            <mat-card-subtitle>all actors starring in this movie:</mat-card-subtitle>
+                            <mat-nav-list>
+                                <mat-list-item *ngFor="let actor of actors"> {{ actor.name }}
+                                    <button mat-icon-button [routerLink]="['/actor-detail/', actor.id]">
+                                        <mat-icon>info</mat-icon>
+                                    </button>
+                                </mat-list-item>
+                            </mat-nav-list>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <mat-card-actions fxLayoutAlign="center">
+                    <button type="submit" mat-raised-button color="primary" [disabled]="movieDetailForm.invalid"
+                            routerLink="/movie">Go Back
+                    </button>
+                </mat-card-actions>
+            </mat-card-content>
+        </mat-card>
+    </form>
+</section>
