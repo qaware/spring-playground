@@ -1,0 +1,21 @@
+<section class="movie-detail" fxLayout fxLayoutAlign="center center">
+    <form [formGroup]="actorDetailForm" (ngSubmit)="onSubmit()" novalidate>
+        <mat-card fxFlex.xs="100%" fxFlex="400px">
+            <mat-card-header>
+                <img mat-card-avatar [src]="defaultImage" alt="defaultImage"/>
+                <mat-card-title>{{ name }}</mat-card-title>
+                <mat-card-subtitle>{{ age }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content fxLayout="column" fxLayoutAlign="center center">
+                    <mat-action-list>
+                        <button mat-list-item *ngFor="let movie of movies"> {{ movie }}
+                        </button>
+                    </mat-action-list>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center">
+                <button type="submit" mat-raised-button color="primary" [disabled]="actorDetailForm.invalid" routerLink="/movie">Go Back</button>
+            </mat-card-actions>
+
+        </mat-card>
+    </form>
+</section>

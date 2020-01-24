@@ -1,0 +1,52 @@
+<section class="edit-movie" fxLayout fxLayoutAlign="center center">
+    <form [formGroup]="movieVoteForm" (ngSubmit)="onSubmit()" novalidate>
+        <mat-card fxFlex.xs="100%" fxFlex="400px">
+            <mat-card-content fxLayout="column" fxLayoutAlign="center center">
+                <mat-card-header>
+                    <mat-card-subtitle>
+                        <mat-form-field class="movie-input">
+                            <label>
+                                <input type="text"
+                                       matInput
+                                       placeholder="Id"
+                                       formControlName="id"
+                                       [value]="id"
+                                />
+                            </label>
+                        </mat-form-field>
+                    </mat-card-subtitle>
+                    <mat-card-subtitle>
+                        <mat-form-field class="movie-input">
+                            <label>
+                                <input type="text"
+                                       matInput
+                                       placeholder="Title"
+                                       formControlName="title"
+                                       [value]="title"
+                                />
+                            </label>
+                        </mat-form-field>
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-form-field class="movie-input">
+                    <mat-label>Your vote</mat-label>
+                    <mat-select placeholder="Vote"
+                                formControlName="vote"
+                                [(ngModel)]="vote"
+                    >
+                        <mat-option *ngFor="let vote of votes" [value]="vote"> {{ vote }}
+                            <mat-icon>star_border</mat-icon>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center">
+                <a routerLink="/movie" mat-button>Cancel</a>
+                <button type="submit" mat-button [disabled]="movieVoteForm.invalid">
+                    Save
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</section>
+

@@ -1,0 +1,81 @@
+<section fxLayout="row" fxLayoutAlign="center center" class="app-movie">
+    <mat-card fxFlex="90%" fxFlex.xs="100%">
+        <div fxLayoutGap="30px" fxLayoutAlign="center center">
+            <button mat-raised-button matTooltip="Add Movie" color="primary" routerLink="/movie-add">add a new movie
+            </button>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>movie ID</th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>title</th>
+                    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="country">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>country</th>
+                    <td mat-cell *matCellDef="let element"> {{element.country}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="launch">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>launch</th>
+                    <td mat-cell *matCellDef="let element"> {{element.launch}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>category</th>
+                    <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="averageVote">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>average vote</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.averageVote }} / 5
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="star" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef>options</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <a mat-menu-item [routerLink]="['/movie-detail/movie', element.id]">
+                                <mat-icon>remove_red_eye</mat-icon>
+                                <span>see all details on this movie</span>
+                            </a>
+                            <a mat-menu-item [routerLink]="['/movie-vote/movie', element.id]">
+                                <mat-icon>how_to_vote</mat-icon>
+                                <span>vote on this movie</span>
+                            </a>
+                            <a mat-menu-item [routerLink]="['/movie-comment/movie', element.id]">
+                                <mat-icon>comment</mat-icon>
+                                <span>comment on this movie</span>
+                            </a>
+                            <a mat-menu-item [routerLink]="['/movie-edit/movie', element.id]">
+                                <mat-icon>edit</mat-icon>
+                                <span>edit this movie</span>
+                            </a>
+                            <button mat-menu-item (click)="deleteMovieById(element.id)">
+                                <mat-icon>delete</mat-icon>
+                                <span>delete this movie</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <div>
+            <mat-paginator [pageSizeOptions]="[15, 30, 60]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card>
+</section>

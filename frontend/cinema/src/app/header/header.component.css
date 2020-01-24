@@ -1,0 +1,29 @@
+.header {
+    background-color: black;
+}
+.cinema {
+    text-decoration: none;
+    color: white;
+    flex: 1 1 auto;
+}
+
+.movies {
+    color: white;
+}
+
+.actors {
+    color: white;
+}
+
+.mat-icon {
+    flex: 1 1 auto;
+    color: white;
+}
+
+.navigation-items {
+    list-style: none;
+    padding: 1px;
+    margin: 1px;
+}
+
+
