@@ -1,5 +1,4 @@
 package de.qaware.cinema.data.movie;
-
 import de.qaware.cinema.data.movie.et.MovieET;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +13,8 @@ public interface MovieRepository extends JpaRepository<MovieET, Long> {
     @Query(value = "SELECT * FROM movie ", nativeQuery = true)
     List<MovieET>getAllMovies();
 
-    @Query(value = "SELECT * FROM movie WHERE id = :id", nativeQuery = true)
-    MovieET findMovie(Long id);
+    @Query(value = "SELECT title FROM movie WHERE id = :id", nativeQuery = true)
+    String findTitle(Long id);
 
     Optional <MovieET> findById(Long id);
 

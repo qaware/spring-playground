@@ -19,8 +19,8 @@
     <groupId>org.apache.maven</groupId>
     <artifactId>cinemaofclassicmovies</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cinemaofclassicmovies</name>
-    <description>cinemaofclassicmovies project for Spring Boot</description>
+    <name>cinema</name>
+    <description>cinema project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>

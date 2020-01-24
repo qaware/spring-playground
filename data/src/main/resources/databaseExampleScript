@@ -1,0 +1,110 @@
+CREATE TABLE movie
+(
+    ID           BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    TITLE        VARCHAR(80),
+    COUNTRY      VARCHAR(80),
+    LAUNCH       NUMERIC,
+    CATEGORY     VARCHAR(80),
+    VERSION      BIGSERIAL
+);
+
+INSERT INTO movie (TITLE, COUNTRY, LAUNCH, CATEGORY, VERSION)
+VALUES ('The Godfather', 'USA', 1972, 'Mafia', 0),
+       ('Shawshank Redemption', 'USA', 1994, 'Drama', 0),
+       ('Pulp Fiction', 'USA', 1994, 'Crime', 0),
+       ('Schindler`s List', 'USA', 1993, 'Drama', 0),
+       ('Forrest Gump', 'USA', 1994, 'Drama', 0),
+       ('Seven', 'USA', 1995, 'Thriller', 0),
+       ('Catch Me If You Can', 'USA / Canada', 2002, 'Comedy', 0),
+       ('Apollo 13', 'USA', 1995, 'Drama', 0),
+       ('Philadelphia', 'USA', 1993, 'Drama', 0),
+       ('James Bond 007: Skyfall', 'Great Britain', 2012, 'Thriller', 0),
+       ('Inglourious Basterds', 'USA', 2009, 'Alternate history comedy', 0);
+
+SELECT * FROM movie;
+
+DROP TABLE movie;
+
+CREATE TABLE actor
+(
+    ID          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    NAME        VARCHAR(80),
+    AGE         NUMERIC
+);
+
+SELECT * FROM actor;
+
+INSERT INTO actor (NAME, AGE)
+VALUES ('Tom Hanks', 63),('Al Pacino', 79),('Brad Pitt', 56),('John Travolta', 65),('Bruce Willis', 64),('Liam Neeson', 67),('Marlon Brando', 80),
+       ('Diane Keaton', 74),('Tim Robbins', 61),('Morgan Freeman', 82),('Quentin Tarantino', 56),('Uma Thurman', 49),('Ralph Fiennes', 57),
+       ('Daniel Craig', 51), ('Leonardo di Caprio', 45);
+
+DROP TABLE actor;
+
+CREATE TABLE movie_actor
+(
+    MOVIE_ID    BIGINT REFERENCES movie(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+    ACTOR_ID    BIGINT REFERENCES actor(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT  ID PRIMARY KEY (MOVIE_ID, ACTOR_ID)
+);
+
+INSERT INTO movie_actor (MOVIE_ID, ACTOR_ID)
+VALUES (1,2),(1,7),(1,8),
+       (2,9),(2,10),
+       (3,4),(3,5),(3,11),(3,12),
+       (4,6),(4,13),
+       (5,1),
+       (6,3),(6,10),
+       (7,1),(7,15),
+       (8,1),
+       (9,1),
+       (10,13),(10,14),
+       (11,3),(11,11);
+
+SELECT * FROM movie_actor;
+
+DROP TABLE movie_actor;
+
+CREATE TABLE vote
+(   ID       BIGINT GENERATED ALWAYS AS IDENTITY,
+    MOVIE_ID BIGINT REFERENCES movie(ID),
+    VOTE     NUMERIC,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (MOVIE_ID) REFERENCES movie(ID)
+);
+
+SELECT *
+FROM vote;
+
+INSERT INTO vote (MOVIE_ID, VOTE)
+VALUES (1,5),(1,1),(1,2),(2,4),(3,1),(3,3),(3,2),(4,1),(4,5),(5,2),(5,3),(6,5),(6,4),(6,3),(6,2),(6,1),(7,5),(8,4),
+       (9,5),(10,2),(11,1);
+
+DROP TABLE vote;
+
+CREATE TABLE comment
+(
+    ID       BIGINT GENERATED ALWAYS AS IDENTITY,
+    MOVIE_ID BIGINT REFERENCES movie(ID),
+    COMMENT  VARCHAR(100),
+    PRIMARY KEY (ID),
+    FOREIGN KEY (MOVIE_ID) REFERENCES movie(ID)
+);
+
+SELECT *
+FROM comment;
+
+INSERT INTO comment (MOVIE_ID, COMMENT)
+VALUES (1, 'Great Movie!'),(1, 'best movie ever'), (1, 'too scary'),(1, 'great actors'),
+       (2, 'awesome'),(2, 'loved it'),(2, 'worst movie ever'),(2, 'great story about friendship'),
+       (3, 'hated the movie'),(3, 'lovely!'),(3, 'good dancing'),
+       (4, 'very sad'),(4, 'Liam Neeson is the perfect fit'),
+       (5, 'so funny'),(5, 'run Forrest!'),(5, 'best movie in the entire world'),
+       (6, 'scary all the way through'), (6, 'my worst nightmare'),
+       (7, 'awesome'),
+       (8, 'comment'),
+       (9, 'wow'),
+       (10, 'heartbreaking'),
+       (11, 'so funny');
+
+DROP TABLE comment;

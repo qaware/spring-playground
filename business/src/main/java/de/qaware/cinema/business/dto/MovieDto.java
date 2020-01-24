@@ -18,4 +18,5 @@ public class MovieDto {
     private int version;
     private int averageVote;
     private List<String> comments;
+    private List<ActorDto> actors;
 }
